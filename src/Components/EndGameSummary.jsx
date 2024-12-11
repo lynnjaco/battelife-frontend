@@ -3,15 +3,6 @@ import { gameService } from "../services/api";
 import "./EndGameSummary.css"
 
 function EndGameSummary({gameData}) {
-    gameData = {playerName: "howard",
-        playerStats: {
-          morale: 60,
-          health: 60,
-          money: 50,
-          relationships: 30,
-          career: 90,
-          home: 80,
-        }}
 
     const [summary, setSummary] = useState(null)
     const {playerName, playerStats} = gameData
