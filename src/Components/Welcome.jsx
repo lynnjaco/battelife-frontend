@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import "./Welcome.css"
+import ShipPlacement from './ShipPlacement'
 
 function Welcome() {
   const [playerName, setPlayerName] = useState('')
@@ -11,10 +13,11 @@ function Welcome() {
       setPlayerShips([...playerShips, ship])
     }
   }
-
   const handleStartGame = async () => {
     try {
-      const response = await fetch('/api/startGame', {
+      console.log('Sending game data:', { playerName, playerShips })
+      
+      const response = await fetch('/api/game/start', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -25,7 +28,9 @@ function Welcome() {
         }),
       })
 
+      console.log('Response status:', response.status)
       const data = await response.json()
+      console.log('Response data:', data)
       
       if (response.ok) {
         setGameData(data)
@@ -34,11 +39,12 @@ function Welcome() {
         alert(data.message)
       }
     } catch (error) {
+      console.log('Full error:', error)
       console.error('Error starting game:', error)
     }
   }
-
-  console.log(playerName);
+  // console.log(playerName);
+  // console.log(gameData);
 
   if (gameStarted && gameData) {
     return (
@@ -84,31 +90,18 @@ function Welcome() {
           value={playerName}
           onChange={(e) => setPlayerName(e.target.value)}
         />
-        
-        <div className="ship-placement">
-          <h3>Place your ships ({playerShips.length}/5)</h3>
-          {/* Add ship placement grid or controls here */}
-          <button 
-            onClick={() => handleShipPlacement({
-              type: 'ship',
-              position: { x: 0, y: 0 },
-              length: 3,
-              orientation: 'horizontal'
-            })}
-            disabled={playerShips.length >= 5}
-          >
-            Place Ship
-          </button>
-        </div>
 
         <button
           className="start-button"
           onClick={handleStartGame}
-          disabled={!playerName || playerShips.length !== 5}
         >
           Start Game
         </button>
       </div>
+
+      <ShipPlacement onPlaceShips={handleShipPlacement} />
+
+  
     </div>
   )
 }
