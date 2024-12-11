@@ -12,7 +12,7 @@ function Welcome({ playerName, setPlayerName }) {
 
   return (
     <div className="welcome-container">
-      <h1>Welcome to Battlelife</h1>
+      <h1 className="hinge">Welcome to Battlelife</h1>
       
       <div className="game-instructions">
         <h2>How to Play</h2>

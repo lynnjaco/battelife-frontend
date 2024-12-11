@@ -3,6 +3,7 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import "./ShipPlacement.css";
 import { useNavigate } from "react-router-dom";
+import { gameService } from '../services/api';
 
 const ships = {
   Health: { size: 5, color: "#FF6B6B" },
@@ -12,7 +13,12 @@ const ships = {
   Home: { size: 2, color: "#FFEEAD" },
 };
 
-const ShipPlacement = ({ playerName, playerShips, setPlayerShips, gameId, gameData, setGameData }) => {  
+const ShipPlacement = ({
+  playerName,
+  playerShips,
+  setPlayerShips,
+  setGameData,
+}) => {
   const navigate = useNavigate();
   const [rotation, setRotation] = useState("horizontal");
   const [selectedShip, setSelectedShip] = useState(null);
@@ -93,40 +99,14 @@ const ShipPlacement = ({ playerName, playerShips, setPlayerShips, gameId, gameDa
 
   const handleStartGame = async () => {
     try {
-      // Only attempt to start game if ships are placed
-      if (Object.values(playerShips).every((ship) => ship.length > 0)) {
-        const response = await fetch("/api/game/start", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            playerName,
-            playerShips: placedShips, // Use placedShips instead of playerShips
-          }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          setGameData(data);
-          setGameStarted(true);
-          // Navigate to game board after successful start
-          navigate(`/game/${data.gameId}`);
-        } else {
-          alert(data.message);
-        }
-      }
+        const gameData = await gameService.startGame(playerName, placedShips);
+        setGameData(gameData);
+        setGameStarted(true);
+        navigate(`/game/${gameData.gameId}`);
     } catch (error) {
-      console.error("Error starting game:", error);
-      alert("Failed to start game. Please try again.");
+        console.error("Error starting game:", error);
     }
-  };
-
-  console.log("Placed Ships:", placedShips);
-  console.log("Player Ships:", playerShips);
-  console.log("Game Data:", gameData);
-  console.log("Player Name:", playerName);
+};
 
   return (
     <DndProvider backend={HTML5Backend}>
