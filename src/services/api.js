@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3333';
+const API_URL = 'https://battlelife-backend.onrender.com';
 
 console.log('Request URL:', `${API_URL}/game/start`);
 
