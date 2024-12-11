@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3333/api';
+const API_URL = 'http://localhost:3333';
 
 console.log('Request URL:', `${API_URL}/game/start`);
 
@@ -39,5 +39,31 @@ export const gameService = {
     getGameStats: async (gameId) => {
         const response = await axios.get(`${API_URL}/game/${gameId}/stats`);
         return response.data;
+    },
+
+    getUserHitScenario: async (user) => {
+        const response = await axios.post(`${API_URL}/claude/generate-user-hit-scenario`,{
+            user
+        })
+        return response.data
+    },
+
+    getCpuHitScenario: async (user) => {
+        const response = await axios.post(`${API_URL}/claude/generate-cpu-hit-scenario`,{
+            user
+        })
+        return response.data
+    },
+
+    getEndGameSummary: async (finalStats) => {
+        try {
+            const response = await axios.post(`${API_URL}/claude/generate-summary`, {
+                finalStats
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error response:', error.response.data);
+            throw error;
+        }
     }
 };

@@ -7,7 +7,13 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import EndGameSummary from "./Components/EndGameSummary";
 
 function App() {
-  const [playerName, setPlayerName] = useState("");
+  const [playerData, setPlayerData] = useState({
+    name: "",
+    hometown: "",
+    age: 0,
+    gender: "",
+    occupation: ""
+  });
   const [playerShips, setPlayerShips] = useState(null);
   const [gameData, setGameData] = useState(null);
   const [gameId, setGameId] = useState(null);
@@ -20,14 +26,14 @@ function App() {
           <Route
             path="/"
             element={
-              <Welcome playerName={playerName} setPlayerName={setPlayerName} />
+              <Welcome playerData={playerData} setPlayerData={setPlayerData} />
             }
           />
           <Route
             path="/setup"
             element={
               <ShipPlacement
-                playerName={playerName}
+                playerData={playerData}
                 playerShips={playerShips}
                 setPlayerShips={setPlayerShips}
                 gameId={gameId}
@@ -41,7 +47,7 @@ function App() {
             path="/game/:gameId"
             element={
               <Game
-                playerName={playerName}
+                playerData={playerData}
                 playerShips={playerShips}
                 gameData={gameData}
                 setGameData={setGameData}
@@ -50,7 +56,7 @@ function App() {
           />{" "}
           <Route
             path="/summary"
-            element={<EndGameSummary playerName={playerName} gameData={gameData} />}
+            element={<EndGameSummary gameData={gameData} />}
           />
         </Routes>
       </Router>

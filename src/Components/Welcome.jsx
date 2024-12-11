@@ -2,13 +2,21 @@ import React from "react";
 import "./Welcome.css";
 import { useNavigate } from "react-router-dom";
 
-function Welcome({ playerName, setPlayerName }) {
+function Welcome({ playerData, setPlayerData }) {
   const navigate = useNavigate();
 
   const handleNameSubmit = (event) => {
     event.preventDefault();
     navigate("/setup");
   };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setPlayerData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
+  }
 
   return (
     <div className="welcome-container">
@@ -25,17 +33,79 @@ function Welcome({ playerName, setPlayerName }) {
       </div>
 
       <form className="setup-form" onSubmit={handleNameSubmit}>
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={playerName}
-          onChange={(e) => setPlayerName(e.target.value)}
-          required
-        />
+        <div className="form-group">
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your name"
+            value={playerData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="hometown">Hometown:</label>
+          <input
+            type="text"
+            id="hometown"
+            name="hometown"
+            placeholder="Enter your hometown"
+            value={playerData.hometown}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="age">Age:</label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            placeholder="Enter your age"
+            value={playerData.age}
+            onChange={handleChange}
+            required
+            min="0"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="gender">Gender:</label>
+          <select
+            id="gender"
+            name="gender"
+            value={playerData.gender}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="occupation">Occupation:</label>
+          <input
+            type="text"
+            id="occupation"
+            name="occupation"
+            placeholder="Enter your occupation"
+            value={playerData.occupation}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
         <button 
           className="start-button" 
           type="submit"
-          disabled={!playerName.trim()}
+          disabled={!playerData.name.trim()}
         >
           Start Game
         </button>
